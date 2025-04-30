@@ -98,6 +98,14 @@ function addEventListeners() {
     // Game state updates
     document.addEventListener('gameStateUpdated', updateUI);
 
+        document.getElementById('place-bet').addEventListener('click', () => {
+        const betAmount = parseInt(betInputElement.value);
+        if (game.placeBet(betAmount)) {
+            playSound('placeBet'); // Sonido al realizar la apuesta
+            playSound('buttonClick'); // Sonido adicional al pulsar el botón
+        }
+    });
+
     // Betting controls
     document.getElementById('increase-bet').addEventListener('click', () => {
         const currentValue = parseInt(betInputElement.value);
@@ -146,6 +154,8 @@ function addEventListeners() {
             playSound('buttonClick');
         }
     });
+
+
 }
 
 function updateUI(event) {
@@ -203,11 +213,14 @@ function updateUI(event) {
     }
     
     // Play sound effects for game results
+    // Play sound effects for game results
     if (state.gameState === 'gameOver') {
         // Check if player won by looking at the message
         if (state.message.includes('Ganas')) {
-            playSound('win');
+            console.log("Reproduciendo sonido de victoria...");
+            playSound('win'); // Asegúrate de que el sonido esté definido correctamente
         } else if (state.message.includes('Has perdut') || state.message.includes('La banca guanya')) {
+            console.log("Reproduciendo sonido de derrota...");
             playSound('lose');
         }
     }
@@ -258,8 +271,16 @@ const sounds = {
     cardDeal: new Audio('card-deal.mp3'),
     win: new Audio('win.mp3'),
     lose: new Audio('lose.mp3'),
-    buttonClick: new Audio('button-click.mp3')
+    buttonClick: new Audio('button-click.mp3'),
+    placeBet: new Audio('place-bet.mp3')
 };
+
+const musicaFons = new Audio('Fondo.mp3');
+musicaFons.volume = 0.4;
+musicaFons.loop = true;
+document.addEventListener('DOMContentLoaded', () => {
+    musicaFons.play().catch(e => console.log("Error al reproducir música de fondo:", e));
+});
 
 // Play sound effect (to be used when audio files are available)
 function playSound(soundName) {
