@@ -1,0 +1,271 @@
+// Update the import path if files are in a Model folder
+import Game from "./Model/Game.js";
+
+// Create a new game instance
+const game = new Game();
+
+// UI Elements
+let playerHandElement;
+let dealerHandElement;
+let messageElement;
+let currentBetElement;
+let betInputElement;
+let playerMoneyElement;
+let playerPointsElement;
+let dealerPointsElement;
+let betControlsElement;
+let gameControlsElement;
+
+// Card image mapping for Spanish deck (based on the provided image)
+const suitMapping = {
+    'Oros': 0,    // Primera fila (amarillo)
+    'Copas': 1,   // Segunda fila (rojo)
+    'Espadas': 2, // Tercera fila (azul)
+    'Bastos': 3   // Cuarta fila (verde/rojo)
+};
+
+const valueMapping = {
+    'A': 0,  // Index 0 (first card)
+    '2': 1,
+    '3': 2,
+    '4': 3,
+    '5': 4,
+    '6': 5,
+    '7': 6,
+    '8': 7,  // Incluidas aunque no se usen en 7 y medio
+    '9': 8,  // Incluidas aunque no se usen en 7 y medio
+    'J': 9,  // Sota (10 en la imagen)
+    'Q': 10, // Caballo (11 en la imagen)
+    'K': 11  // Rey (12 en la imagen)
+};
+
+// Initialize the game
+document.addEventListener('DOMContentLoaded', () => {
+    initializeUIElements();
+    addEventListeners();
+    updateUIState();
+    game.newRound();
+});
+
+function initializeUIElements() {
+    // Get elements from DOM
+    playerHandElement = document.getElementById('player-hand');
+    dealerHandElement = document.getElementById('dealer-hand');
+    messageElement = document.getElementById('message');
+    currentBetElement = document.getElementById('current-bet');
+    betInputElement = document.getElementById('bet-amount');
+    playerMoneyElement = document.getElementById('player-money');
+    playerPointsElement = document.getElementById('player-points');
+    dealerPointsElement = document.getElementById('dealer-points');
+    betControlsElement = document.getElementById('bet-controls');
+    gameControlsElement = document.getElementById('game-controls');
+
+    // Initialize UI state
+    updateUIState();
+}
+
+function updateUIState() {
+    // Set initial visibility
+    gameControlsElement.style.display = 'none';
+    betControlsElement.style.display = 'block';
+    
+    // Make sure bet amount is valid
+    validateBetAmount();
+}
+
+function validateBetAmount() {
+    const currentValue = parseInt(betInputElement.value);
+    const maxBet = game.player.money;
+    
+    // Ensure bet amount is not more than player's money
+    if (currentValue > maxBet) {
+        betInputElement.value = maxBet;
+    }
+    
+    // Ensure minimum bet
+    if (currentValue < 10 && maxBet >= 10) {
+        betInputElement.value = 10;
+    }
+    
+    // Disable bet button if player has no money
+    document.getElementById('place-bet').disabled = maxBet < 10;
+    
+    // Update display
+    playerMoneyElement.textContent = `Dinero: ${game.player.money}€`;
+}
+
+function addEventListeners() {
+    // Game state updates
+    document.addEventListener('gameStateUpdated', updateUI);
+
+    // Betting controls
+    document.getElementById('increase-bet').addEventListener('click', () => {
+        const currentValue = parseInt(betInputElement.value);
+        const maxBet = game.player.money;
+        betInputElement.value = Math.min(currentValue + 10, maxBet);
+        playSound('buttonClick');
+    });
+
+    document.getElementById('decrease-bet').addEventListener('click', () => {
+        const currentValue = parseInt(betInputElement.value);
+        if (currentValue > 10) {
+            betInputElement.value = currentValue - 10;
+            playSound('buttonClick');
+        }
+    });
+
+    document.getElementById('place-bet').addEventListener('click', () => {
+        const betAmount = parseInt(betInputElement.value);
+        if (game.placeBet(betAmount)) {
+            playSound('cardDeal');
+        }
+    });
+
+    // Game controls
+    document.getElementById('hit').addEventListener('click', () => {
+        if (game.hit()) {
+            playSound('cardDeal');
+        }
+    });
+
+    document.getElementById('stand').addEventListener('click', () => {
+        if (game.stand()) {
+            playSound('buttonClick');
+        }
+    });
+
+    document.getElementById('new-game').addEventListener('click', () => {
+        if (game.newRound()) {
+            // Reset UI
+            playerHandElement.innerHTML = '';
+            dealerHandElement.innerHTML = '';
+            playerPointsElement.textContent = '';
+            dealerPointsElement.textContent = '';
+            validateBetAmount();
+            
+            playSound('buttonClick');
+        }
+    });
+}
+
+function updateUI(event) {
+    const state = event.detail;
+    
+    // Update hands with animation
+    updateHand(playerHandElement, state.player.hand, false);
+    updateHand(dealerHandElement, state.computer.hand, state.gameState === 'playing');
+    
+    // Update player money
+    playerMoneyElement.textContent = `Diners: ${state.player.money}€`;
+    
+    // Update message
+    messageElement.textContent = state.message;
+    
+    // Update current bet
+    if (state.bet > 0) {
+        currentBetElement.textContent = `Aposta actual: ${state.bet}€`;
+    } else {
+        currentBetElement.textContent = '';
+    }
+    
+    // Update controls visibility
+    betControlsElement.style.display = state.gameState === 'betting' ? 'block' : 'none';
+    gameControlsElement.style.display = state.gameState !== 'betting' ? 'block' : 'none';
+    
+    // Update button states
+    document.getElementById('hit').disabled = state.gameState !== 'playing' || state.currentPlayer !== state.player;
+    document.getElementById('stand').disabled = state.gameState !== 'playing' || state.currentPlayer !== state.player;
+    document.getElementById('new-game').disabled = state.gameState === 'betting';
+    
+    // Show points
+    if (state.gameState !== 'betting') {
+        const playerPoints = state.player.calculatePoints();
+        const computerPoints = state.computer.calculatePoints();
+        
+        if (playerPoints > 0) {
+            playerPointsElement.textContent = `Punts: ${playerPoints}`;
+        }
+        
+        if (computerPoints > 0 && state.gameState !== 'playing') {
+            dealerPointsElement.textContent = `Punts: ${computerPoints}`;
+        } else if (state.gameState === 'playing') {
+            dealerPointsElement.textContent = ''; // Hide dealer points during player's turn
+        }
+    } else {
+        playerPointsElement.textContent = '';
+        dealerPointsElement.textContent = '';
+    }
+    
+    // Update max bet based on player money
+    betInputElement.max = state.player.money;
+    if (parseInt(betInputElement.value) > state.player.money) {
+        betInputElement.value = state.player.money;
+    }
+    
+    // Play sound effects for game results
+    if (state.gameState === 'gameOver') {
+        // Check if player won by looking at the message
+        if (state.message.includes('Ganas')) {
+            playSound('win');
+        } else if (state.message.includes('Has perdut') || state.message.includes('La banca guanya')) {
+            playSound('lose');
+        }
+    }
+}
+
+function updateHand(handElement, cards, hideCard) {
+    // Clear the hand
+    handElement.innerHTML = '';
+    
+    // Add cards with animation
+    cards.forEach((card, index) => {
+        const cardElement = document.createElement('div');
+        cardElement.className = 'card';
+        
+        setTimeout(() => {
+            cardElement.classList.add('card-dealt');
+        }, index * 300);
+        
+        // Hide dealer card during player's turn
+        if (hideCard && index === 0) {
+            cardElement.classList.add('card-hidden');
+        } else {
+            // Position the background image to show the correct card
+            const suitIndex = suitMapping[card.suit];
+            const valueIndex = valueMapping[card.value];
+            
+            // Use the uploaded baraja española image
+            cardElement.style.backgroundImage = 'url("baraja_espanola.png")';
+            
+            // Card dimensions from the image
+            const cardWidth = 83;  // Width of each card in pixels
+            const cardHeight = 153; // Height of each card in pixels
+            
+            // Calculate position based on value and suit
+            const xPos = -valueIndex * cardWidth;
+            const yPos = -suitIndex * cardHeight;
+            
+            cardElement.style.backgroundPosition = `${xPos}px ${yPos}px`;
+            cardElement.style.backgroundSize = 'auto';
+        }
+        
+        handElement.appendChild(cardElement);
+    });
+}
+
+// Sound effects
+const sounds = {
+    cardDeal: new Audio('card-deal.mp3'),
+    win: new Audio('win.mp3'),
+    lose: new Audio('lose.mp3'),
+    buttonClick: new Audio('button-click.mp3')
+};
+
+// Play sound effect (to be used when audio files are available)
+function playSound(soundName) {
+    if (sounds[soundName]) {
+        // Reset the sound to the beginning before playing
+        sounds[soundName].currentTime = 0;
+        sounds[soundName].play().catch(e => console.log("Audio play failed:", e));
+    }
+}

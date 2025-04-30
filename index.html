@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ludopatia Express</title>
+    <link rel="icon" href="1f911.png">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="game-container" class="game-container">
+        <header>
+            <h1>Benvingut! A Ludopatía Express</h1>
+            <div id="player-stats" class="player-stats">
+                <span id="player-money">Diners: 1000€</span>
+            </div>
+        </header>
+
+        <main>
+            <section id="dealer-area" class="dealer-area">
+                <h2>La Banca</h2>
+                <div id="dealer-hand" class="hand"></div>
+                <div id="dealer-points" class="points-display"></div>
+            </section>
+
+            <section id="game-status" class="game-status">
+                <div id="message" class="message"></div>
+                <div id="current-bet" class="current-bet"></div>
+            </section>
+
+            <section id="player-area" class="player-area">
+                <h2>Jugador</h2>
+                <div id="player-hand" class="hand"></div>
+                <div id="player-points" class="points-display"></div>
+            </section>
+        </main>
+
+        <section id="controls" class="controls">
+            <div id="bet-controls" class="bet-controls">
+                <h3>Apuesta</h3>
+                <div class="bet-input-group">
+                    <button id="decrease-bet" class="bet-button">-</button>
+                    <input type="number" id="bet-amount" min="10" step="10" value="100">
+                    <button id="increase-bet" class="bet-button">+</button>
+                </div>
+                <button id="place-bet" class="action-button">Apostar</button>
+            </div>
+
+            <div id="game-controls" class="game-controls">
+                <button id="hit" class="action-button">Demanar Carta</button>
+                <button id="stand" class="action-button">Plantar-se</button>
+                <button id="new-game" class="action-button">Nova Ronda</button>
+            </div>
+        </section>
+
+        <section id="rules" class="rules">
+            <h3>Normes del joc</h3>
+            <ul>
+                <li>L'objectiu és acostar-se a 7,5 punts sense passar.</li>
+                <li>Les cartes numèriques (A-7) valen el valor nominal (A=1).</li>
+                <li>Les figures (Sota, Cavall, Rei) valen 0.5 punts cadascuna.</li>
+                <li>Si et passa de 7.5, es perd automàticament.</li>
+                <li>La banca juga després del jugador i es planta amb 5 punts o més.</li>
+                <h21>No ens fem responsables del que pugui passar a la teva integritat física :)</h21>
+
+            </ul>
+        </section>
+    </div>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>
