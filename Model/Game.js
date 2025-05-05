@@ -5,6 +5,7 @@ export default class Game {
     constructor() {
         this.deck = new Deck();
         this.player = new Player('Jugador');
+        this.player.money = 250; // Comenzar con 250€
         this.computer = new Player('Banca');
         this.currentPlayer = this.player;
         this.gameState = 'betting'; // betting, playing, computerTurn, gameOver
@@ -144,7 +145,7 @@ export default class Game {
     determineWinner() {
         const playerPoints = this.player.calculatePoints();
         const computerPoints = this.computer.calculatePoints();
-        
+    
         if (playerPoints > 7.5) {
             this.message = "T'has pasat! La banca guanya.";
         } else if (computerPoints > 7.5) {
@@ -159,8 +160,21 @@ export default class Game {
             this.message = "Empat! se't torna la teva aposta.";
             this.player.money += this.bet; // Return the bet
         }
-        
-        this.gameState = 'gameOver';
+    
+        if (this.player.money >= 3000) {
+            this.message = "Felicitats! Has arribat als 3000€ i has guanyat el joc!";
+            this.gameState = 'gameOver';
+    
+            const victoryEvent = new CustomEvent('playerWon', {
+                detail: {
+                    message: this.message
+                }
+            });
+            document.dispatchEvent(victoryEvent);
+        } else {
+            this.gameState = 'gameOver';
+        }
+    
         this.updateGameState();
     }
 

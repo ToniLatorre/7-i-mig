@@ -281,3 +281,32 @@ musicaFons.loop = true;
 document.addEventListener('DOMContentLoaded', () => {
     musicaFons.play().catch(e => console.log("Error al reproduir la musica de fons", e));
 });
+
+// Imagen de victoria
+const victoryImage = document.createElement('img');
+victoryImage.src = '/Imatges/victory.png';
+victoryImage.alt = 'Has guanyat!';
+victoryImage.style.position = 'fixed';
+victoryImage.style.top = '50%';
+victoryImage.style.left = '50%';
+victoryImage.style.transform = 'translate(-50%, -50%)';
+victoryImage.style.zIndex = '1000';
+victoryImage.style.display = 'none';
+document.body.appendChild(victoryImage);
+
+// Sonido de victoria
+const victorySound = new Audio('/Sons/victory.mp3');
+
+// Listener para el evento de victoria
+document.addEventListener('playerWon', (event) => {
+    // Mostrar la imagen
+    victoryImage.style.display = 'block';
+
+    // Reproducir el sonido
+    victorySound.play().catch(e => console.log("Error al reproduir el so de victòria", e));
+
+    // Ocultar la imagen después de 5 segundos
+    setTimeout(() => {
+        victoryImage.style.display = 'none';
+    }, 5000);
+});
