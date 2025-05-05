@@ -279,14 +279,5 @@ const musicaFons = new Audio('/Sons/Fondo.mp3');
 musicaFons.volume = 0.4;
 musicaFons.loop = true;
 document.addEventListener('DOMContentLoaded', () => {
-    musicaFons.play().catch(e => console.log("Error al reproducir música de fondo:", e));
+    musicaFons.play().catch(e => console.log("Error al reproduir la musica de fons", e));
 });
-
-// Play sound effect (to be used when audio files are available)
-function playSound(soundName) {
-    if (sounds[soundName]) {
-        // Reset the sound to the beginning before playing
-        sounds[soundName].currentTime = 0;
-        sounds[soundName].play().catch(e => console.log("Audio play failed:", e));
-    }
-}
