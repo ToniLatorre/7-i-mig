@@ -6,7 +6,7 @@
 
 body {
     font-family: 'Montserrat', sans-serif;
-    background: #0c3b26 url('table-bg.jpg') no-repeat center center fixed;
+    background: #0c3b26 url('/Imatges/table-bg.jpg') no-repeat center center fixed;
     background-size: cover;
     color: #f0f0f0;
     padding: 20px;
@@ -102,7 +102,7 @@ main {
 }
 
 .card-hidden {
-    background-image: url('card-back.jpg') !important;
+    background-image: url('/Imatges/card-back.jpg') !important;
     background-size: cover !important;
     background-position: center !important;
 }

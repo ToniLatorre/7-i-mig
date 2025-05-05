@@ -248,7 +248,7 @@ function updateHand(handElement, cards, hideCard) {
             const valueIndex = valueMapping[card.value];
             
             // Use the uploaded baraja española image
-            cardElement.style.backgroundImage = 'url("baraja_espanola.png")';
+            cardElement.style.backgroundImage = 'url("/Imatges/baraja_espanola.png")';
             
             // Card dimensions from the image
             const cardWidth = 83;  // Width of each card in pixels
@@ -268,14 +268,14 @@ function updateHand(handElement, cards, hideCard) {
 
 // Sound effects
 const sounds = {
-    cardDeal: new Audio('card-deal.mp3'),
-    win: new Audio('win.mp3'),
-    lose: new Audio('lose.mp3'),
-    buttonClick: new Audio('button-click.mp3'),
-    placeBet: new Audio('place-bet.mp3')
+    cardDeal: new Audio('/Sons/card-deal.mp3'),
+    win: new Audio('/Sons/win.mp3'),
+    lose: new Audio('/Sons/lose.mp3'),
+    buttonClick: new Audio('/Sons/button-click.mp3'),
+    placeBet: new Audio('/Sons/place-bet.mp3')
 };
 
-const musicaFons = new Audio('Fondo.mp3');
+const musicaFons = new Audio('/Sons/Fondo.mp3');
 musicaFons.volume = 0.4;
 musicaFons.loop = true;
 document.addEventListener('DOMContentLoaded', () => {
