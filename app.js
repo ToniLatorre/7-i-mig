@@ -154,6 +154,8 @@ function addEventListeners() {
             playSound('buttonClick');
         }
     });
+
+
 }
 
 function updateUI(event) {
@@ -264,22 +266,6 @@ function updateHand(handElement, cards, hideCard) {
     });
 }
 
-// Sonido de victoria
-const victorySound = new Audio('/Sons/victory.mp3');
-
-// Listener para el evento de victoria
-document.addEventListener('playerWon', (event) => {
-    // Mostrar la imagen
-    victoryImage.style.display = 'block';
-    victorySound.volume = 0.8; 
-    // Reproducir el sonido
-    victorySound.play().catch(e => console.log("Error al reproduir el so de victòria", e));
-
-    // Ocultar la imagen después de 5 segundos
-    setTimeout(() => {
-        victoryImage.style.display = 'none';
-    }, 5000);
-
 // Sound effects
 const sounds = {
     cardDeal: new Audio('/Sons/card-deal.mp3'),
@@ -291,7 +277,7 @@ const sounds = {
 };
 
 const musicaFons = new Audio('/Sons/Fondo.mp3');
-musicaFons.volume = 0.4;
+musicaFons.volume = 0.5;
 musicaFons.loop = true;
 document.addEventListener('DOMContentLoaded', () => {
     musicaFons.play().catch(e => console.log("Error al reproduir la musica de fons", e));
@@ -308,4 +294,21 @@ victoryImage.style.transform = 'translate(-50%, -50%)';
 victoryImage.style.zIndex = '1000';
 victoryImage.style.display = 'none';
 document.body.appendChild(victoryImage);
+
+// Sonido de victoria
+const victorySound = new Audio('/Sons/victory.mp3');
+
+// Listener para el evento de victoria
+document.addEventListener('playerWon', (event) => {
+    // Mostrar la imagen
+    victoryImage.style.display = 'block';
+    victorySound.volume = 0.8; 
+    // Reproducir el sonido
+    victorySound.play().catch(e => console.log("Error al reproduir el so de victòria", e));
+
+    // Ocultar la imagen después de 5 segundos
+
+    setTimeout(() => {
+        victoryImage.style.display = 'none';
+    }, 10000);
 });

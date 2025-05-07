@@ -5,7 +5,7 @@ export default class Game {
     constructor() {
         this.deck = new Deck();
         this.player = new Player('Jugador');
-        this.player.money = 250; // Comenzar con 250€
+        this.player.money = 500; // Comenzar con 250€
         this.computer = new Player('Banca');
         this.currentPlayer = this.player;
         this.gameState = 'betting'; // betting, playing, computerTurn, gameOver
