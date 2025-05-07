@@ -154,8 +154,6 @@ function addEventListeners() {
             playSound('buttonClick');
         }
     });
-
-
 }
 
 function updateUI(event) {
@@ -273,14 +271,17 @@ const sounds = {
     lose: new Audio('/Sons/lose.mp3'),
     buttonClick: new Audio('/Sons/button-click.mp3'),
     placeBet: new Audio('/Sons/place-bet.mp3'),
-    musicaFons: new Audio('/Sons/Fondo.mp3')
 };
 
 const musicaFons = new Audio('/Sons/Fondo.mp3');
-musicaFons.volume = 0.5;
+musicaFons.load();
+musicaFons.autoplay = false;
 musicaFons.loop = true;
+musicaFons.volume = 0.5;
 document.addEventListener('DOMContentLoaded', () => {
-    musicaFons.play().catch(e => console.log("Error al reproduir la musica de fons", e));
+    document.body.addEventListener('click', () => {
+        musicaFons.play().catch(e => console.log("Error al reproduir la música de fons:", e));
+    }, { once: true });
 });
 
 // Imagen de victoria
