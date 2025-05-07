@@ -98,7 +98,7 @@ function addEventListeners() {
     // Game state updates
     document.addEventListener('gameStateUpdated', updateUI);
 
-        document.getElementById('place-bet').addEventListener('click', () => {
+    document.getElementById('place-bet').addEventListener('click', () => {
         const betAmount = parseInt(betInputElement.value);
         if (game.placeBet(betAmount)) {
             playSound('placeBet'); // Sonido al realizar la apuesta
@@ -154,8 +154,6 @@ function addEventListeners() {
             playSound('buttonClick');
         }
     });
-
-
 }
 
 function updateUI(event) {
@@ -251,8 +249,8 @@ function updateHand(handElement, cards, hideCard) {
             cardElement.style.backgroundImage = 'url("/Imatges/baraja_espanola.png")';
             
             // Card dimensions from the image
-            const cardWidth = 83;  // Width of each card in pixels
-            const cardHeight = 153; // Height of each card in pixels
+            const cardWidth = 208;  // Width of each card in pixels
+            const cardHeight = 319; // Height of each card in pixels
             
             // Calculate position based on value and suit
             const xPos = -valueIndex * cardWidth;
@@ -266,13 +264,30 @@ function updateHand(handElement, cards, hideCard) {
     });
 }
 
+// Sonido de victoria
+const victorySound = new Audio('/Sons/victory.mp3');
+
+// Listener para el evento de victoria
+document.addEventListener('playerWon', (event) => {
+    // Mostrar la imagen
+    victoryImage.style.display = 'block';
+    victorySound.volume = 0.8; 
+    // Reproducir el sonido
+    victorySound.play().catch(e => console.log("Error al reproduir el so de victòria", e));
+
+    // Ocultar la imagen después de 5 segundos
+    setTimeout(() => {
+        victoryImage.style.display = 'none';
+    }, 5000);
+
 // Sound effects
 const sounds = {
     cardDeal: new Audio('/Sons/card-deal.mp3'),
     win: new Audio('/Sons/win.mp3'),
     lose: new Audio('/Sons/lose.mp3'),
     buttonClick: new Audio('/Sons/button-click.mp3'),
-    placeBet: new Audio('/Sons/place-bet.mp3')
+    placeBet: new Audio('/Sons/place-bet.mp3'),
+    musicaFons: new Audio('/Sons/Fondo.mp3')
 };
 
 const musicaFons = new Audio('/Sons/Fondo.mp3');
@@ -293,20 +308,4 @@ victoryImage.style.transform = 'translate(-50%, -50%)';
 victoryImage.style.zIndex = '1000';
 victoryImage.style.display = 'none';
 document.body.appendChild(victoryImage);
-
-// Sonido de victoria
-const victorySound = new Audio('/Sons/victory.mp3');
-
-// Listener para el evento de victoria
-document.addEventListener('playerWon', (event) => {
-    // Mostrar la imagen
-    victoryImage.style.display = 'block';
-
-    // Reproducir el sonido
-    victorySound.play().catch(e => console.log("Error al reproduir el so de victòria", e));
-
-    // Ocultar la imagen después de 5 segundos
-    setTimeout(() => {
-        victoryImage.style.display = 'none';
-    }, 5000);
 });
