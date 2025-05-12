@@ -263,6 +263,7 @@ const sounds = {
 };
 
 const musicaFons = new Audio('/Sons/Fondo.mp3');
+musicaFons.preload = 'auto';
 musicaFons.load();
 musicaFons.autoplay = false;
 musicaFons.loop = true;
