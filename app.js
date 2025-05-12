@@ -225,34 +225,23 @@ function updateUI(event) {
 }
 
 function updateHand(handElement, cards, hideCard) {
-    // Clear the hand
     handElement.innerHTML = '';
-    
-    // Add cards with animation
-    cards.forEach((card, index) => {
+        cards.forEach((card, index) => {
         const cardElement = document.createElement('div');
         cardElement.className = 'card';
         
         setTimeout(() => {
             cardElement.classList.add('card-dealt');
         }, index * 300);
-        
-        // Hide dealer card during player's turn
         if (hideCard && index === 0) {
             cardElement.classList.add('card-hidden');
         } else {
-            // Position the background image to show the correct card
             const suitIndex = suitMapping[card.suit];
             const valueIndex = valueMapping[card.value];
             
-            // Use the uploaded baraja española image
             cardElement.style.backgroundImage = 'url("/Imatges/baraja_espanola.png")';
-            
-            // Card dimensions from the image
-            const cardWidth = 208;  // Width of each card in pixels
-            const cardHeight = 319; // Height of each card in pixels
-            
-            // Calculate position based on value and suit
+            const cardWidth = 208;
+            const cardHeight = 319;
             const xPos = -valueIndex * cardWidth;
             const yPos = -suitIndex * cardHeight;
             
@@ -298,16 +287,10 @@ document.body.appendChild(victoryImage);
 
 // Sonido de victoria
 const victorySound = new Audio('/Sons/victory.mp3');
-
-// Listener para el evento de victoria
 document.addEventListener('playerWon', (event) => {
-    // Mostrar la imagen
     victoryImage.style.display = 'block';
     victorySound.volume = 0.8; 
-    // Reproducir el sonido
     victorySound.play().catch(e => console.log("Error al reproduir el so de victòria", e));
-
-    // Ocultar la imagen después de 5 segundos
 
     setTimeout(() => {
         victoryImage.style.display = 'none';
