@@ -296,4 +296,45 @@ document.addEventListener('playerWon', (event) => {
     setTimeout(() => {
         victoryImage.style.display = 'none';
     }, 10000);
+
+    // Imagen de derrota
+const defeatImage = document.createElement('img');
+defeatImage.src = '/Imatges/defeat.png'; // Ruta de la imagen de derrota
+defeatImage.alt = 'Has perdut!';
+defeatImage.style.position = 'fixed';
+defeatImage.style.top = '50%';
+defeatImage.style.left = '50%';
+defeatImage.style.transform = 'translate(-50%, -50%)';
+defeatImage.style.zIndex = '1000';
+defeatImage.style.display = 'none'; // Ocultar inicialmente
+document.body.appendChild(defeatImage);
+
+// Sonido de derrota
+const defeatSound = new Audio('/Sons/lose.mp3');
+
+// Listener para el evento de derrota
+document.addEventListener('playerLost', (event) => {
+    // Mostrar la imagen de derrota
+    defeatImage.style.display = 'block';
+
+    // Reproducir el sonido de derrota
+    defeatSound.volume = 0.8;
+    defeatSound.play().catch(e => console.log("Error al reproduir el so de derrota", e));
+
+    // Ocultar la imagen después de 5 segundos
+    setTimeout(() => {
+        defeatImage.style.display = 'none';
+    }, 5000);
 });
+if (playerPoints > 7.5) {
+    this.message = "T'has pasat! La banca guanya.";
+    this.gameState = 'gameOver';
+    const defeatEvent = new CustomEvent('playerLost', {
+        detail: {
+            message: this.message
+        }
+    });
+    document.dispatchEvent(defeatEvent);
+}
+});
+
