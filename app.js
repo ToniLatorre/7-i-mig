@@ -240,8 +240,8 @@ function updateHand(handElement, cards, hideCard) {
             const valueIndex = valueMapping[card.value];
             
             cardElement.style.backgroundImage = 'url("/Imatges/baraja_espanola.png")';
-            const cardWidth = 208;
-            const cardHeight = 319;
+            const cardWidth = 85.3;
+            const cardHeight = 130.8;
             const xPos = -valueIndex * cardWidth;
             const yPos = -suitIndex * cardHeight;
             

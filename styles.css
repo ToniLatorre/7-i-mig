@@ -87,8 +87,8 @@ main {
 }
 
 .card {
-    width: 100px;
-    height: 150px;
+    width: 85.3px;
+    height: 130.8px;
     background-color: white;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
@@ -268,10 +268,6 @@ input[type="number"] {
         grid-template-columns: 1fr;
     }
 
-    .card {
-        width: 80px;
-        height: 120px;
-    }
 }
 
 h21{
