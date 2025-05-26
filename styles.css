@@ -238,7 +238,6 @@ input[type="number"] {
     line-height: 1.5;
 }
 
-/* Animaciones */
 @keyframes dealCard {
     0% {
         transform: translateY(-200px) rotate(20deg);
@@ -254,7 +253,6 @@ input[type="number"] {
     animation: dealCard 0.5s ease forwards;
 }
 
-/* Media queries para dispositivos móviles */
 @media (max-width: 768px) {
     .game-container {
         padding: 15px;
