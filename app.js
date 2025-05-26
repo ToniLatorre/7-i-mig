@@ -101,8 +101,8 @@ function addEventListeners() {
     document.getElementById('place-bet').addEventListener('click', () => {
         const betAmount = parseInt(betInputElement.value);
         if (game.placeBet(betAmount)) {
-            playSound('placeBet'); // Sonido al realizar la apuesta
-            playSound('buttonClick'); // Sonido adicional al pulsar el botón
+            playSound('placeBet');
+            playSound('buttonClick');
         }
     });
 
@@ -185,7 +185,6 @@ function updateUI(event) {
     document.getElementById('stand').disabled = state.gameState !== 'playing' || state.currentPlayer !== state.player;
     document.getElementById('new-game').disabled = state.gameState === 'betting';
     
-    // Show points
     if (state.gameState !== 'betting') {
         const playerPoints = state.player.calculatePoints();
         const computerPoints = state.computer.calculatePoints();
@@ -197,14 +196,13 @@ function updateUI(event) {
         if (computerPoints > 0 && state.gameState !== 'playing') {
             dealerPointsElement.textContent = `Punts: ${computerPoints}`;
         } else if (state.gameState === 'playing') {
-            dealerPointsElement.textContent = ''; // Hide dealer points during player's turn
+            dealerPointsElement.textContent = '';
         }
     } else {
         playerPointsElement.textContent = '';
         dealerPointsElement.textContent = '';
     }
     
-    // Update max bet based on player money
     betInputElement.max = state.player.money;
     if (parseInt(betInputElement.value) > state.player.money) {
         betInputElement.value = state.player.money;
@@ -253,7 +251,6 @@ function updateHand(handElement, cards, hideCard) {
     });
 }
 
-// Sound effects
 const sounds = {
     cardDeal: new Audio('/Sons/card-deal.mp3'),
     win: new Audio('/Sons/win.mp3'),
@@ -274,7 +271,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { once: true });
 });
 
-// Imagen de victoria
 const victoryImage = document.createElement('img');
 victoryImage.src = '/Imatges/victory.png';
 victoryImage.alt = 'Has guanyat!';
@@ -286,7 +282,6 @@ victoryImage.style.zIndex = '1000';
 victoryImage.style.display = 'none';
 document.body.appendChild(victoryImage);
 
-// Sonido de victoria
 const victorySound = new Audio('/Sons/victory.mp3');
 document.addEventListener('playerWon', (event) => {
     victoryImage.style.display = 'block';
@@ -297,31 +292,25 @@ document.addEventListener('playerWon', (event) => {
         victoryImage.style.display = 'none';
     }, 10000);
 
-    // Imagen de derrota
 const defeatImage = document.createElement('img');
-defeatImage.src = '/Imatges/defeat.png'; // Ruta de la imagen de derrota
+defeatImage.src = '/Imatges/defeat.png';
 defeatImage.alt = 'Has perdut!';
 defeatImage.style.position = 'fixed';
 defeatImage.style.top = '50%';
 defeatImage.style.left = '50%';
 defeatImage.style.transform = 'translate(-50%, -50%)';
 defeatImage.style.zIndex = '1000';
-defeatImage.style.display = 'none'; // Ocultar inicialmente
+defeatImage.style.display = 'none';
 document.body.appendChild(defeatImage);
 
-// Sonido de derrota
 const defeatSound = new Audio('/Sons/lose.mp3');
 
-// Listener para el evento de derrota
 document.addEventListener('playerLost', (event) => {
-    // Mostrar la imagen de derrota
     defeatImage.style.display = 'block';
 
-    // Reproducir el sonido de derrota
     defeatSound.volume = 0.8;
     defeatSound.play().catch(e => console.log("Error al reproduir el so de derrota", e));
 
-    // Ocultar la imagen después de 5 segundos
     setTimeout(() => {
         defeatImage.style.display = 'none';
     }, 5000);
